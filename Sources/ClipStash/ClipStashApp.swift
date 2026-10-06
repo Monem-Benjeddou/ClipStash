@@ -20,6 +20,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        Stability.didFinishLaunching()
         DockIcon.shared.isEnabled = { Prefs.showInDock }
         DockIcon.shared.start()
         registerHotKey()
@@ -59,7 +60,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 @main
 struct ClipStashApp: App {
     @NSApplicationDelegateAdaptor private var delegate: AppDelegate
-    @ObservedObject private var store = HistoryStore.shared
+    @ObservedObject private var store: HistoryStore
+
+    init() {
+        Stability.start() // before anything else, so crashes and hangs from here on are caught
+        _store = ObservedObject(wrappedValue: HistoryStore.shared)
+    }
 
     var body: some Scene {
         Window("ClipStash", id: "library") {
