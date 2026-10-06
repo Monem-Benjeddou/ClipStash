@@ -36,12 +36,22 @@ A clipboard history app for macOS. Search everything you've copied and paste it 
 
 ## Install
 
+**Quickest:** paste this into Terminal. It downloads the latest release, checks its checksum and signature, and installs it into Applications without the "unidentified developer" warning ([read the script first](install.sh)):
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/Monem-Benjeddou/ClipStash/main/install.sh | bash
+```
+
+Run the same command again later to update.
+
+**Or install it yourself:**
+
 1. Download `ClipStash-mac.zip` from the [latest release](https://github.com/Monem-Benjeddou/ClipStash/releases/latest) and unzip it.
 2. Move `ClipStash.app` to `/Applications`.
-3. The app isn't notarized, so open it the first time by right-clicking it and choosing **Open**. Alternatively, run:
-   ```sh
-   xattr -dr com.apple.quarantine /Applications/ClipStash.app
-   ```
+3. Open it. ClipStash isn't notarized by Apple (that requires a paid developer account), so macOS blocks the first launch:
+   - **macOS 15 or later:** close the warning, open **System Settings › Privacy & Security**, scroll down, and click **Open Anyway** next to ClipStash.
+   - **macOS 14:** right-click ClipStash.app, choose **Open**, then click **Open** again.
+   - **Or**, in Terminal: `xattr -dr com.apple.quarantine /Applications/ClipStash.app`
 4. Optional: to have ClipStash paste into the active app for you, grant **Accessibility** access in **Settings › General**. Without it, choosing an item copies it and you press ⌘V yourself.
 
 ## Where your data lives
