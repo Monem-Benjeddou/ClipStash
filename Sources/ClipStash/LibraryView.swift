@@ -243,6 +243,14 @@ struct LibraryView: View {
 
     @ViewBuilder private var banners: some View {
         VStack(spacing: 0) {
+            if store.inSafeMode {
+                Banner(symbol: "lifepreserver", tint: .orange,
+                       message: "ClipStash quit unexpectedly twice right after starting, so capturing is paused. Your history is safe.",
+                       action: ("Resume Capturing", { store.leaveSafeMode() }), dismiss: nil)
+            } else if let notice = store.crashNotice {
+                Banner(symbol: "arrow.clockwise.circle.fill", tint: .blue,
+                       message: notice + ". Your history is safe.", dismiss: { store.crashNotice = nil })
+            }
             if let problem = store.problem {
                 Banner(symbol: "exclamationmark.triangle.fill", tint: .orange, message: problem) { store.problem = nil }
             }
@@ -274,6 +282,7 @@ private struct Banner: View {
     let symbol: String
     let tint: Color
     let message: String
+    var action: (String, () -> Void)? = nil
     let dismiss: (() -> Void)?
 
     var body: some View {
@@ -281,6 +290,9 @@ private struct Banner: View {
             Image(systemName: symbol).foregroundStyle(tint)
             Text(message).font(.callout).fixedSize(horizontal: false, vertical: true)
             Spacer()
+            if let action {
+                Button(action.0, action: action.1).controlSize(.small)
+            }
             if let dismiss {
                 Button { dismiss() } label: { Image(systemName: "xmark") }
                     .buttonStyle(.borderless)

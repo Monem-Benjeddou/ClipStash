@@ -44,7 +44,15 @@ final class HistoryStore: ObservableObject {
     static let shared = HistoryStore()
 
     @Published private(set) var items: [ClipItem] = []
-    @Published var isPaused = false
+    @Published var isPaused = false {
+        // Resuming by hand also ends safe mode.
+        didSet { if !isPaused && inSafeMode { leaveSafeMode() } }
+    }
+    /// Safe mode after repeated crashes: capturing starts paused (a clipboard item is the likeliest
+    /// thing to crash at every launch) until it's resumed.
+    @Published private(set) var inSafeMode = Stability.safeMode
+    /// "ClipStash quit unexpectedly and was reopened", until dismissed.
+    @Published var crashNotice = Stability.safeMode ? nil : Stability.previousCrash?.message
     /// A persistent problem worth showing in the UI (save failures, a recovered corrupt file).
     @Published var problem: String?
 
@@ -67,7 +75,8 @@ final class HistoryStore: ObservableObject {
     ]
 
     private init() {
-        let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        let support = (FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
+            ?? URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Library/Application Support"))
             .appendingPathComponent("ClipStash", isDirectory: true)
         imagesDir = support.appendingPathComponent("images", isDirectory: true)
         indexURL = support.appendingPathComponent("history.json")
@@ -75,9 +84,16 @@ final class HistoryStore: ObservableObject {
 
         lastChangeCount = NSPasteboard.general.changeCount
         load()
+        if inSafeMode { isPaused = true }
         timer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.poll() }
         }
+    }
+
+    func leaveSafeMode() {
+        Stability.leaveSafeMode()
+        inSafeMode = false
+        if isPaused { isPaused = false }
     }
 
     /// Loads the history. An unreadable file is set aside (never overwritten) so nothing is lost.

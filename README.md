@@ -66,6 +66,12 @@ To delete everything, quit ClipStash and remove that folder.
 
 ## Reliability
 
+- **Crashes are caught, and ClipStash comes back.**
+  - If ClipStash crashes (a runtime error, a memory error or an uncaught exception), it records what happened and reopens itself, then tells you it was reopened.
+  - If it stops responding for 45 seconds, it's restarted the same way. A short freeze is only logged.
+  - **Safe mode.** If it crashes twice in a row within two minutes of starting, it starts in safe mode: capturing starts paused until you click **Resume Capturing**. Your history stays as it is.
+  - A third quick crash stops the automatic reopening, so a crash loop can't run forever.
+- **Only one copy runs.** Opening a second copy (say, one in Downloads) brings the running one forward instead of starting another.
 - **Your history is never wiped by a bad file.** If `history.json` can't be read, it's renamed to `history-unreadable-<date>.json` and kept. ClipStash starts a new history and tells you what happened.
 - **Saves are crash-safe.** Each write replaces the file in a single step. Writes happen one at a time, so an older save can't overwrite a newer one, and the latest state is saved when you quit.
 - **Save failures are shown.** If the disk is full or the folder isn't writable, a banner says so instead of failing silently.
