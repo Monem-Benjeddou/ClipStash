@@ -77,7 +77,13 @@ jobs:
           TAG: ${{ github.ref_name }}
         run: |
           cat > notes.md <<NOTES
-          **Mac** (macOS 14 or later, Apple Silicon or Intel): download \`ClipStash-mac.zip\`, unzip it, and move ClipStash.app to Applications. The first time, open it with right-click → Open, because the app isn't notarized by Apple.
+          **Mac** (macOS 14 or later, Apple Silicon or Intel). The quickest way to install or update is to paste this into Terminal:
+
+          \`\`\`sh
+          curl -fsSL https://raw.githubusercontent.com/Monem-Benjeddou/ClipStash/main/install.sh | bash
+          \`\`\`
+
+          Or download \`ClipStash-mac.zip\`, unzip it, and move ClipStash.app to Applications. The app isn't notarized by Apple, so on macOS 15 or later click **Open Anyway** in System Settings › Privacy & Security after the first launch (on macOS 14, right-click → Open).
 
           Press ⇧⌘V anywhere to open Quick Paste. To have ClipStash paste for you, grant Accessibility access in Settings › General.
 
