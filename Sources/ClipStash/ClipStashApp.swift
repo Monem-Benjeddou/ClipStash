@@ -20,7 +20,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        NSApp.setActivationPolicy(Prefs.showInDock ? .regular : .accessory)
+        DockIcon.shared.isEnabled = { Prefs.showInDock }
+        DockIcon.shared.start()
         registerHotKey()
         // Re-register when the shortcut is changed in Settings.
         defaultsObserver = NotificationCenter.default.addObserver(

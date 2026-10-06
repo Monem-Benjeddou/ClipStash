@@ -22,6 +22,7 @@ A clipboard history app for macOS. Search everything you've copied and paste it 
 - **Library window.** Browse by type (Text, Links, Images, Files), by pinned items, or by the app you copied from. Each item has a full preview.
 - **Keeps what you copy.** Plain and formatted text, links, images, and files, each with the app it came from. Copying the same thing again moves it to the top instead of creating a duplicate.
 - **Pinned items** are never removed automatically.
+- **Lives in the menu bar.** Close the window and ClipStash leaves the Dock but keeps capturing; reopen it from the menu bar.
 - **Privacy.**
   - Anything an app marks as concealed (passwords from password managers, per the [nspasteboard.org](http://nspasteboard.org) markers) is never saved.
   - You can ignore specific apps entirely. Common password managers are ignored by default.
@@ -31,7 +32,7 @@ A clipboard history app for macOS. Search everything you've copied and paste it 
   - history size (100 items up to unlimited)
   - the Quick Paste shortcut
   - launch at login
-  - showing the app in the Dock
+  - showing the app in the Dock while its window is open
   - auto-paste
 
 ## Install

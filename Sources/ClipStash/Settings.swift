@@ -92,8 +92,8 @@ private struct GeneralSettings: View {
                 if let loginError {
                     Text(loginError).font(.caption).foregroundStyle(.red)
                 }
-                Toggle("Show in Dock", isOn: $showInDock)
-                    .onChange(of: showInDock) { _, show in NSApp.setActivationPolicy(show ? .regular : .accessory) }
+                Toggle("Show in Dock while a window is open", isOn: $showInDock)
+                    .onChange(of: showInDock) { _, _ in DockIcon.shared.update() }
             }
 
             Section {
